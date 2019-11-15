@@ -1,6 +1,7 @@
 // packages
 const express = require("express");
 const bodyParser = require("body-parser");
+const db = require('./models/index.js');
 
 // starting express app
 const app = express();
@@ -22,7 +23,7 @@ app.get("/home", function(req, res) {
 });
 
 // POST /ninja
-app.post("/ninja", function(req, res) {
+app.post("/ninja-tasker", function(req, res) {
   console.log(req.body.taskItem);
   list.push(req.body.taskItem);
   res.render("home.ejs", { list: list });
@@ -35,8 +36,10 @@ app.delete("/delete/:index", function(req, res) {
 
   res.json(list);
 });
-
+db.sequelize.sync().then(function(){
 // server listeing for request
-app.listen(3000, function() {
-  console.log("server is liT!!!!!!!");
-});
+app.listen(3000, function(err) {
+  if (err) console.log(err);
+   console.log("server is liT!!!!!!!");
+})
+})
